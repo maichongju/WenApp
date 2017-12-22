@@ -1,0 +1,14 @@
+/* Buttons */
+button{
+    border-radius:0;
+}
+
+.btn{
+    padding: 10px;
+	margin: 10px;
+	font-size: 14px;
+	color: white;
+	background: #F2A900;
+	transition: 0.4s;
+	border: 1px solid #F2A900;
+}
