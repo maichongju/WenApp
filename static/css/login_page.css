@@ -1,0 +1,10 @@
+body{
+    text-align: center;
+    font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+    background-color: rgba(0, 136, 255, 0.774)
+}
+.prompt{
+    text-align: right;
+    margin-left: 10px;
+    color: white
+}

@@ -1,10 +1,51 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheets" href="static/css/login_page.css">
+    <link rel="stylesheets" href="static/css/elements.css">
+    
     <title>Login</title>
+    <style>
+        body{
+    font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+    background-color: rgba(0, 136, 255, 0.774)
+    }
+    .prompt{
+        padding-left: 20px;
+        color: white
+    }
+    table{
+        border-collapse: collapse;
+    }
+    </style>
 
 </head>
 <body>
-    <h1>This is the login page</h1>
-
+    <div>
+        <form>
+            <table>
+                   <tr>
+                        <h2 id="Login">Login</h2>
+					</tr>
+                <div>
+                    <tr>
+                        <div>
+                            <label style="text-align:right" class="prompt">Username</label> <br>
+                            <input id="username" type="text" autocomplete="on" >
+                        </div>
+                    </tr>
+                    <tr>
+                        <div>
+                            <label class="prompt">Password</label><br>
+                            <input id="password" type="password" autocomplete="on" >
+                        </div>
+                    </tr>
+                </div>
+                <button id="loginbtn">Login</button>
+            </table>
+        </form>
+    </div>
+    
 </body>
