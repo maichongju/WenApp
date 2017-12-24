@@ -3,49 +3,48 @@
     <meta charset="utf-8">
     
     <!-- Stylesheets -->
-    <link rel="stylesheets" href="static/css/login_page.css">
-    <link rel="stylesheets" href="static/css/elements.css">
+    <link rel="stylesheet" href="/static/css/login_page.css">
     
     <title>Login</title>
-    <style>
-        body{
-    font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
-    background-color: rgba(0, 136, 255, 0.774)
-    }
-    .prompt{
-        padding-left: 20px;
-        color: white
-    }
-    table{
-        border-collapse: collapse;
-    }
-    </style>
-
+	<style>
+	
+	</style>
+	
 </head>
 <body>
-    <div>
-        <form>
-            <table>
-                   <tr>
-                        <h2 id="Login">Login</h2>
-					</tr>
-                <div>
-                    <tr>
-                        <div>
-                            <label style="text-align:right" class="prompt">Username</label> <br>
-                            <input id="username" type="text" autocomplete="on" >
-                        </div>
-                    </tr>
-                    <tr>
-                        <div>
-                            <label class="prompt">Password</label><br>
-                            <input id="password" type="password" autocomplete="on" >
-                        </div>
-                    </tr>
-                </div>
-                <button id="loginbtn">Login</button>
-            </table>
-        </form>
-    </div>
-    
+	<div id="out" class="center">
+		<form action="{{url_for('login')}}" method="post">
+		<table>
+			<tr>
+				<th id="title" style="text-align: center;" ><h1>Login</h1></th>
+				
+			</tr>
+			{% if error %}
+			<tr>
+				<th class="errormsg">{{error}}</th>
+			</tr>
+			{% endif %}
+			<tr>
+				<th class="prompt">Username</th>
+			</tr>
+			<tr>
+				<th>
+					<input name="username" id="username" type="text" placeholder="Enter Username" autocomplete="on" required>
+				</th>
+			</tr>
+			<tr>
+				<th class="prompt">Password</th>
+			</tr>
+			<tr>
+				<th>
+					<input name="password" id="password" type="password" placeholder="Enter Password" autocomplete="on" required>
+				</th>
+			</tr>
+			<tr>
+				<th> <input id="btn_login" type="submit" value="Login"></th>
+			</tr>
+		</table>
+		</form>
+		<p id="signupprop">Don't have a account yet? <a id="signup" href="/login?page=signup">Create one</a></p>
+	</div>
 </body>

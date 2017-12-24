@@ -1,10 +1,102 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Signika');
+
 body{
-    text-align: center;
-    font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
-    background-color: rgba(0, 136, 255, 0.774)
+	font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+	background-color: rgba(127,197,255,0.25);
 }
-.prompt{
-    text-align: right;
-    margin-left: 10px;
-    color: white
+
+.center{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+#out{
+	width: 500px;
+	margin: -250px 0 0 -250px; 
+}
+
+#signupout{
+	width:500px;
+	margin: -250px 0 0 -250px;
+}
+
+table{
+	background-color: white;
+	border: 3px solid #F1F1F1;
+	margin: auto;
+	width: 500px;
+
+}		
+
+#title{
+	color: black;
+	font-family: 'Signika', sans-serif;
+	text-align: center;
+}
+
+th.prompt{
+	font-family: 'Open Sans', sans-serif;
+	font-style:italic;
+	text-align: left;
+	font-size: initial;
+	letter-spacing:1px;
+	padding-left: 10px;
+
+}
+
+#btn_login,#btn_create{
+	width: 90%;
+	margin-top:15px; 
+}
+
+
+
+input[type=text], input[type=password]{
+	width: 95%;
+	padding: 12px 20px;
+	margin: 10px 0;
+	box-sizing: border-box;
+	border: none;
+	border-bottom: 2px solid rgba(131,131,131,0.5)
+}
+
+input[type=text]:focus, input[type=password]:focus {
+	outline: none;
+	border: none;
+	border-bottom: 2px solid rgba(54,54,54,1.00);
+}
+
+input[type=submit]{
+	width: 100%;
+	cursor: pointer;
+	color: white;
+	background-color: rgba(25,167,255,1.00);
+	border: none;
+	margin: 8px 0;
+	padding: 14px 20px;
+}
+
+button[type=submit]:hover{
+	opacity: 0.8;
+}
+
+/* sign up prompt*/
+#signupprop{
+	text-align: center;
+}
+
+.errormsg{
+	color: red;
+	font-weight: bold;
+	font-family: "Times New Roman";
+}
+
+th.errormsg{
+	text-align: center;
+}
+
+li.errormsg{
+	text-align: left;
 }
