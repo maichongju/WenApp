@@ -1,3 +1,7 @@
+#from DataBase import connect_db
+from sqlite3 import dbapi2 as sqlite3
+LOGIN_TABLE = "Login"
+
 class User:
 
     def __init__(self,database):
@@ -21,8 +25,17 @@ class User:
             username (string) : username need to be check
             password (string) : password need to be check
         """
-
-        return False
+        db_string = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
+        conn = self._connect_db(self._database)
+        c = conn.cursor()
+        c.execute(db_string)
+        data = c.fetchall()
+        conn.close()
+        if len(data) == 1:
+            self._login = True
+            self._username = data[0][0]
+            self._role = data[0][2]
+        return self._login
 
     def logout(self):
         """
@@ -37,7 +50,10 @@ class User:
         """
         Function will return the current username 
         """
-        return self._username
+        if self._username == None:
+            return "Guest"
+        else:
+            return self._username
 
     def islogin(self):
         """
@@ -52,3 +68,16 @@ class User:
             string : current user role
         """
         return self._role
+
+    def _connect_db(self,db_loca):
+        """
+        Function will create a connection for the given name of database
+        Precondition:
+            db_loca: the location of the database file
+        """
+        try:
+            rv = sqlite3.connect(db_loca)
+            rv.row_factory = sqlite3.Row
+            return rv
+        except Exception:
+            raise Exception("Can't not find the file")

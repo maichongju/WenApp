@@ -8,10 +8,12 @@ from Object.User import User
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(
-    DATABASEROOT = app.root_path + app_config['DataBaseRoot']
+    DATABASEROOT = app.root_path + app_config['DataBaseRoot'],
+    LOGIN = app_config['Login']
 ))
 
 
+user = User(app.config['DATABASEROOT']+app.config['LOGIN'])
 #app.register_blueprint(app) 
 
 
@@ -49,7 +51,6 @@ def login():
 @app.route("/signup", methods = ['GET', 'POST'])
 def signup():
     error = []
-    print("signup")
     if request.method == 'POST':
         if request.form['password'] != request.form['repassword']:
             error.append(SIGN_UP_PASSWORD_NOT_MATCH)
@@ -79,8 +80,8 @@ def login_(request):
     """
     error = None
     if request.method == 'POST':
-        print(request.form['username'])
-        print(request.form['password'])
+        if not user.login(request.form['username'],request.form['password']):
+            error = LOGIN_USER_PASS_ERROR
     return render_template("login.html",error=error)
 
 
