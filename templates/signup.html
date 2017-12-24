@@ -1,53 +1,51 @@
-<!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>Sign Up</title>
-	
-	<!-- stylesheet-->
-	<link rel="stylesheet" href="/static/css/login_page.css">
-</head>
-<body>
-	<div class="center" id="signupout">
-		<form action="{{url_for('signup')}}" method="post">
-			<table>
-				<tr>
-					<th><h1 class="title">Sign up for new accout</h1></th>
-				</tr>
-				{% if error %}
-				<tr>
-					<th>
-						<ul>
-							{% for msg in error %}
-							<li class="errormsg">{{msg}}</li>
-							{% endfor %}
-						</ul>
-					</th>
-				</tr>
-				{% endif %}
-				<tr>
-					<th class="prompt">Username</th>
-				</tr>
-				<tr>
-					<th> <input name="username" id="username" type="text" placeholder="Enter your username" required> </th>
-				</tr>
-				<tr>
-					<th class="prompt">Password</th>
-				</tr>
-				<tr>
-					<th><input name="password" id="password" type="password"  placeholder="Enter your password" required></th>
-				</tr>
-				<tr>
-					<th class="prompt">Re-enter Password</th>
-				</tr>
-				<tr>
-					<th><input  name="repassword" id="repassword" type="password" placeholder="Re-enter your password" required></th>
-				</tr>
-				<tr>
-					<th><input id="btn_create" type="submit" value="Create Account"></th>
-				</tr>
-				
-			</table>
+{% extends "login_layout.html" %}
 
-		</form>
-	</div>
-</body>
+{% block title %}
+	<title>Sign up</title>
+{% endblock %}
+
+{% block content %}
+<div class="center" id="signupout">
+	<form action="{{url_for('signup')}}" method="post">
+		<table>
+			<tr>
+				<th class="title"><h1>Sign up for new accout</h1></th>
+			</tr>
+			{% if error %}
+			<tr>
+				<th>
+					<ul>
+						{% for msg in error %}
+						<li class="errormsg">{{msg}}</li>
+						{% endfor %}
+					</ul>
+				</th>
+			</tr>
+			{% endif %}
+			<tr>
+				<th class="prompt">Username</th>
+			</tr>
+			<tr>
+				<th> <input name="username" id="username" type="text" placeholder="Enter your username" required> </th>
+			</tr>
+			<tr>
+				<th class="prompt">Password</th>
+			</tr>
+			<tr>
+				<th><input name="password" id="password" type="password"  placeholder="Enter your password" required></th>
+			</tr>
+			<tr>
+				<th class="prompt">Re-enter Password</th>
+			</tr>
+			<tr>
+				<th><input  name="repassword" id="repassword" type="password" placeholder="Re-enter your password" required></th>
+			</tr>
+			<tr>
+				<th><input id="btn_create" type="submit" value="Create Account"></th>
+			</tr>
+			
+		</table>
+
+	</form>
+</div>
+{% endblock %}

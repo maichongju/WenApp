@@ -26,7 +26,7 @@ class User:
             password (string) : password need to be check
         """
         db_string = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
-        conn = self._connect_db(self._database)
+        conn = self._connect_db()
         c = conn.cursor()
         c.execute(db_string)
         data = c.fetchall()
@@ -61,6 +61,25 @@ class User:
         """
         return self._login
 
+    def setrole(self,role):
+        """
+        Function will update the user role 
+        """
+        self._updaterole(role)
+        return
+
+    def _updaterole(self,role):
+        """
+        Private helper function for set role, function will update the database data
+        """
+        UPDATE_STRING = "UPDATE {} SET Role = '{}' WHERE Username = '{}'".format(LOGIN_TABLE,role,self._username)
+        coon = self._connect_db()
+        c = coon.cursor()
+        c.execute(UPDATE_STRING)
+        coon.commit()
+        coon.close()
+        return
+
     def getrole(self):
         """
         Function will return the current user role
@@ -69,15 +88,47 @@ class User:
         """
         return self._role
 
-    def _connect_db(self,db_loca):
+    def _connect_db(self):
         """
         Function will create a connection for the given name of database
         Precondition:
             db_loca: the location of the database file
         """
         try:
-            rv = sqlite3.connect(db_loca)
+            rv = sqlite3.connect(self._database)
             rv.row_factory = sqlite3.Row
             return rv
         except Exception:
-            raise Exception("Can't not find the file")
+            raise Exception("Can't not find the database file")
+
+    def signup(self,username,password):
+        """
+        Function will create a new user into database, will check if user is exist
+        if it is exist function will return False, success create then it will return True
+        Precondition:
+            username (string) : username need to create
+            password (string) : password for the user
+        return :
+            True success create, False fail to create
+        """
+        GET_STRING = "SELECT * FROM {} WHERE Username='{}'".format(LOGIN_TABLE,username)
+        PUT_STRING = "INSERT INTO {} VALUES ('{}', '{}', 'USER')".format(LOGIN_TABLE,username,password)
+        coon = self._connect_db()
+        c = coon.cursor()
+        c.execute(GET_STRING)
+        data = c.fetchall()
+
+        # Username taken
+        if len(data)!=0:
+            coon.close()
+            return False
+
+        c.execute(PUT_STRING)
+        coon.commit()
+        coon.close()
+
+        self._username = username
+        self._login = True
+        self._role = "USER"
+
+        return True

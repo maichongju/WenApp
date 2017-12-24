@@ -42,6 +42,11 @@ def login():
 
     if page == "signup":
         return redirect("/signup")
+    elif page== 'success':
+        if user.islogin():
+            return render_template("login_success.html",username = user.getusername())
+        else:
+            return redirect("/login")
     else:
         return redirect("/login") 
 
@@ -54,9 +59,11 @@ def signup():
     if request.method == 'POST':
         if request.form['password'] != request.form['repassword']:
             error.append(SIGN_UP_PASSWORD_NOT_MATCH)
-            error.append(SIGN_UP_USERNAME_TAKEN)
-        if len(error) == 0:
-            error = None
+        else:    
+            if user.signup(request.form['username'],request.form['password']):
+                return render_template("login_success.html",username = user.getusername())
+            else:
+                errpr.append(SIGN_UP_USERNAME_TAKEN)
     return render_template("signup.html",error = error) 
 
 @app.route("/gallery")
@@ -80,7 +87,9 @@ def login_(request):
     """
     error = None
     if request.method == 'POST':
-        if not user.login(request.form['username'],request.form['password']):
+        if user.login(request.form['username'],request.form['password']):
+            return redirect ("/login?page=success")
+        else:    
             error = LOGIN_USER_PASS_ERROR
     return render_template("login.html",error=error)
 

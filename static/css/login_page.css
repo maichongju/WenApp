@@ -100,3 +100,15 @@ th.errormsg{
 li.errormsg{
 	text-align: left;
 }
+
+/*login_success*/
+.successmsg{
+	font-family: 'Signika', sans-serif;
+	text-align: center;
+	font-size: 35px;
+}
+
+#login_suc{
+	width: 500px;
+	margin: -250px 0 0 -250px;
+}

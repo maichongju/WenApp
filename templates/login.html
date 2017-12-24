@@ -1,50 +1,43 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/static/css/login_page.css">
-    
-    <title>Login</title>
-	<style>
-	
-	</style>
-	
-</head>
-<body>
-	<div id="out" class="center">
-		<form action="{{url_for('login')}}" method="post">
-		<table>
-			<tr>
-				<th id="title" style="text-align: center;" ><h1>Login</h1></th>
-				
-			</tr>
-			{% if error %}
-			<tr>
-				<th class="errormsg">{{error}}</th>
-			</tr>
-			{% endif %}
-			<tr>
-				<th class="prompt">Username</th>
-			</tr>
-			<tr>
-				<th>
-					<input name="username" id="username" type="text" placeholder="Enter Username" autocomplete="on" required>
-				</th>
-			</tr>
-			<tr>
-				<th class="prompt">Password</th>
-			</tr>
-			<tr>
-				<th>
-					<input name="password" id="password" type="password" placeholder="Enter Password" autocomplete="on" required>
-				</th>
-			</tr>
-			<tr>
-				<th> <input id="btn_login" type="submit" value="Login"></th>
-			</tr>
-		</table>
-		</form>
-		<p id="signupprop">Don't have a account yet? <a id="signup" href="/login?page=signup">Create one</a></p>
-	</div>
-</body>
+{% extends "login_layout.html" %}
+
+{% block title %}
+	<title>Login</title>
+{% endblock %}
+
+{% block content %}
+<div id="out" class="center">
+	<form action="{{url_for('login')}}" method="post">
+	<table>
+		<tr>
+			<th id="title" style="text-align: center;" ><h1>Login</h1></th>
+			
+		</tr>
+		{% if error %}
+		<tr>
+			<th class="errormsg">{{error}}</th>
+		</tr>
+		{% endif %}
+		<tr>
+			<th class="prompt">Username</th>
+		</tr>
+		<tr>
+			<th>
+				<input name="username" id="username" type="text" placeholder="Enter Username" autocomplete="on" required>
+			</th>
+		</tr>
+		<tr>
+			<th class="prompt">Password</th>
+		</tr>
+		<tr>
+			<th>
+				<input name="password" id="password" type="password" placeholder="Enter Password" autocomplete="on" required>
+			</th>
+		</tr>
+		<tr>
+			<th> <input id="btn_login" type="submit" value="Login"></th>
+		</tr>
+	</table>
+	</form>
+	<p id="signupprop">Don't have a account yet? <a id="signup" href="/login?page=signup">Create one</a></p>
+</div>
+{% endblock %}
