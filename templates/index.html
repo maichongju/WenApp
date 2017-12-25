@@ -11,8 +11,16 @@
     </head>
     
     <body>
-       {% block content %}
-       {% endblock %}
+        <div>
+            {% if user.islogin() == true %}
+                <button onclick="window.location.href='/login?page=logout'">Logout</button>
+            {% else %}
+                <button onclick="window.location.href='/login'">Login</button>
+            {% endif %}
+            {% block content %}
+            {% endblock %}   
+        </div>
+     
 
     </body>
     

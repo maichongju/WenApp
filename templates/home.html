@@ -6,11 +6,7 @@
 
 {% block content %}
     <div>
-        {% if user.islogin() == true %}
-            <button>Logout</button>
-        {% else %}
-            <button>Login</button>
-        {% endif %}
+       
         <p>{{user.islogin()}}</p>
         <h1>Index</h1>
 

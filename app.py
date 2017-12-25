@@ -32,6 +32,7 @@ def start():
 @app.route("/home")
 def index():
     #show_index()
+    print(user.islogin())
     return render_template("home.html",user = user)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -47,6 +48,8 @@ def login():
             return render_template("login_success.html",username = user.getusername())
         else:
             return redirect("/login")
+    elif page == 'logout':
+        return logout()
     else:
         return redirect("/login") 
 
@@ -63,7 +66,7 @@ def signup():
             if user.signup(request.form['username'],request.form['password']):
                 return render_template("login_success.html",username = user.getusername())
             else:
-                errpr.append(SIGN_UP_USERNAME_TAKEN)
+                error.append(SIGN_UP_USERNAME_TAKEN)
     return render_template("signup.html",error = error) 
 
 @app.route("/gallery")
@@ -92,6 +95,13 @@ def login_(request):
         else:    
             error = LOGIN_USER_PASS_ERROR
     return render_template("login.html",error=error)
+
+def logout():
+    """
+    Function will logout current user
+    """
+    user.logout()
+    return redirect("/home")
 
 
 if __name__ == "__main__":
