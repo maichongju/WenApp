@@ -32,7 +32,7 @@ def start():
 @app.route("/home")
 def index():
     #show_index()
-    return render_template("home.html",title = "Index")
+    return render_template("home.html",user = user)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
