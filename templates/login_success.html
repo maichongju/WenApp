@@ -1,5 +1,10 @@
 {% extends "login_layout.html" %}
 
+{% block meta %}
+    <meta http-equiv="refreah" content="5,url=/index">
+{% endblock %}
+
+
 {% block title %}
     <title>Login successed</title>
 {% endblock %}
@@ -8,6 +13,15 @@
     <div class="center" id="login_suc">
         <p class="successmsg">Welcome back</p>
         <p class="successmsg"> <b>{{username}}</b> </p>
-
+        <br>
+        <p id="redirectmsg"> You will bring back to home shortly, or <a href="/home">click here</a> if browser not respoding</p> 
     </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    window.setTimeout(function(){
+        window.location.href = "/home";
+    },5000);
+</script>
 {% endblock %}
