@@ -71,11 +71,11 @@ def signup():
 
 @app.route("/gallery")
 def gallery():
-    return render_template("gallery.html")
+    return render_template("gallery.html",user = user)
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    return render_template("about.html",user = user)
 
 @app.errorhandler(404)
 def handle_error(e):

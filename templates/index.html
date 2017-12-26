@@ -5,22 +5,31 @@
         <meta charset="utf-8">
         {% block meta %}
         {% endblock %}
-
         {% block title %}
         {% endblock %}
+        <!--stylesheet-->
+		<link rel="stylesheet" href="/static/css/index_layout.css">
+		{% block css %}
+		{% endblock %}
     </head>
     
     <body>
-        <div>
-            {% if user.islogin() == true %}
-                <button onclick="window.location.href='/login?page=logout'">Logout</button>
-            {% else %}
-                <button onclick="window.location.href='/login'">Login</button>
-            {% endif %}
-            {% block content %}
-            {% endblock %}   
+        <div class="main_container">
+            <div id="User">
+                {% if user.islogin() == true %}
+                    <button class="btn_loginout" onclick="window.location.href='/login?page=logout'">Logout</button>
+                {% else %}
+                    <button class="btn_loginout" onclick="window.location.href='/login'">Login</button>
+                {% endif %}
+                {% block content %}
+                {% endblock %}   
+            </div>
+			<nav id="topnav">
+				<button onClick="window.location.href='/home'">Home</button>
+				<button onClick="window.location.href='/gallery'">Gallery</button>
+				<button onClick="window.location.href='/about'">About</button>
+			</nav>
         </div>
-     
 
     </body>
     
