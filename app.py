@@ -80,7 +80,7 @@ def about():
 @app.errorhandler(404)
 def handle_error(e):
     
-    return render_template("error404.html"), 404
+    return render_template("error404.html", user = user), 404
 
 def login_(request):
     """

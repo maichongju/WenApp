@@ -2,7 +2,20 @@ body{
     background-color: rgba(127,197,255,0.25);
 }
 
-.main_container{
-	margin: auto;
-	
+div.main_container{
+	width: 1000px;
+	background-color: white;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+button.btn_loginout{
+	background-color: #FFCCCC;
+	border : none;
+	cursor: pointer;
+	width: 60px;
+	padding: 5px 5px;
+	margin: 10px 0 0 930px;
+	text-align: center;
+
 }

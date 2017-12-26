@@ -50,7 +50,7 @@ class User:
         """
         Function will return the current username 
         """
-        if self._username == None:
+        if self._username is None:
             return "Guest"
         else:
             return self._username
