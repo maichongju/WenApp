@@ -32,8 +32,13 @@ def start():
 @app.route("/home")
 def index():
     #show_index()
-    print(user.islogin())
     return render_template("home.html",user = user)
+
+@app.route("/myprofile")
+def profile():
+    if not user.islogin():
+        abort(401)
+    return render_template("profile.html", user = user)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -79,8 +84,11 @@ def about():
 
 @app.errorhandler(404)
 def handle_error(e):
-    
     return render_template("error404.html", user = user), 404
+
+@app.errorhandler(401)
+def error401(e):
+    return render_template("error401.html",user = user),401
 
 def login_(request):
     """

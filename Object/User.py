@@ -16,6 +16,8 @@ class User:
         self._role = None
         self._database = database
 
+    
+
     def login(self,username,password):
         """
         Function will compare the given username and password to the database, 
@@ -24,17 +26,16 @@ class User:
         Precondition:
             username (string) : username need to be check
             password (string) : password need to be check
+        return:
+            True if successed login, false otherwise
         """
-        db_string = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
-        conn = self._connect_db()
-        c = conn.cursor()
-        c.execute(db_string)
-        data = c.fetchall()
-        conn.close()
-        if len(data) == 1:
+        data = self._check_password(username,password)
+        if data is False:
+            return False
+        else:
             self._login = True
-            self._username = data[0][0]
-            self._role = data[0][2]
+            self._username = data[0]
+            self._role = data[2]
         return self._login
 
     def logout(self):
@@ -132,3 +133,48 @@ class User:
         self._role = "USER"
 
         return True
+
+    def update_password(self,old,new):
+        """
+        Function will update the password for the user, function will check
+        if the old password is match, if match then will update the password
+        Precondition:
+            old (string) : old password
+            new (string) : new password
+        """
+        result = self._check_password(self._username,old)
+        if result is False:
+            return False
+        else:
+            self._update_password(new)
+
+        return True
+ 
+    def _update_password(self,password):
+        """
+        Function will update the password in the databse for the current user
+        """
+        UPDATE_STRING = "UPDATE {} SET Password = '{}' WHERE Username = '{}'".format(LOGIN_TABLE,role,self._username)
+        conn = self_connect_db()
+        c.execute(UPDATE_STRING)
+        conn.commit()
+        conn.close()
+        return
+
+    def _check_password(self,username,password):
+        """
+        Function will check if the password match the data,
+        if match function will return the data for the user
+        Precindition:
+            username (string) : username for the user
+            password (string) : password for the user
+        """
+        db_string = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
+        conn = self._connect_db()
+        c = conn.cursor()
+        c.execute(db_string)
+        data = c.fetchall()
+        conn.close()
+        if len(data) == 0:
+            return False 
+        return data[0]

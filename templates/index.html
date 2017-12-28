@@ -17,24 +17,26 @@
         <div class="main_container">
             <div id="User">
                 {% if user.islogin() == true %}
-                    <button class="btn_loginout" onclick="window.location.href='/login?page=logout'">Logout</button>
+                    <p id="text_loginout">Welcome back <a id="profile" href="/myprofile"><b>{{user.getusername()}}</b></a> &nbsp;&nbsp;
+                    <a class="btn_loginout" href="/login?page=logout">Logout</a></p>
                 {% else %}
-                    <button class="btn_loginout" onclick="window.location.href='/login'">Login</button>
+                    <p id="text_loginout">Hi, Guest&nbsp;&nbsp;  
+                    <a class="btn_loginout" href="/login">Login</a></p>
                 {% endif %}
             </div>
+
 			<nav id="topnav">
-				<button onClick="window.location.href='/home'">Home</button>
-				<button onClick="window.location.href='/gallery'">Gallery</button>
-				<button onClick="window.location.href='/about'">About</button>
+				<a class="btn_nav" href="/home">Home</a>
+				<a class="btn_nav" href="/gallery">Gallery</a>
+				<a class="btn_nav" href="/about">About</a>
 			</nav>
        		{% block content %}
             {% endblock %}   
         </div>
-
     </body>
     
     <!-- JS Files -->
-    {% block scripts %}
+    {% block js %}
     {% endblock %}
 	
 </html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/static/css/profile.css">
+	<link rel="stylesheet" href="/static/css/index_layout.css">
+	<title>{{user.getusername()}}</title>
+</head>
+
+<body>
+	<div class="main_container">
+		<div class="prof_nav">
+			<a id="nav" href="/home">Home</a>
+		</div>
+		<div class="prof_title">
+		<p id="prof_username">{{user.getusername()}}</p>
+		</div>
+		<div class="tab">
+			<button class="tablinks" onClick="openProfile(event, 'prof_main')" id="defaultOpen">Profile</button>
+			<button class="tablinks" onClick="openProfile(event, 'prof_password')">Password</button>
+			<button class="tablinks" onClick="openProfile(event, 'prof_other')">Other</button>
+		</div>
+
+		<div id="prof_main" class="tabcontent">
+			<h1>Main tab</h1>
+		</div>
+
+		<div id="prof_password" class="tabcontent">
+			<input name="old_pas" type="password" id="old_pas">
+			<input name="new_pas" type="password" id="new_pas">
+			
+		</div>
+
+		<div id="prof_other" class="tabcontent">
+			<h1>Other tab</h1>
+		</div>
+
+		
+		
+    </div>
+    
+    <script src="/static/js/profile.js"></script>
+</body>
