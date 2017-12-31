@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Bungee');
 body{
+	background-color: rgba(127,197,255,0.25);
 	margin: 0;
 }
+
 #prof_nav{
 	margin: 5px 0 0 0;
 	font-size: 15px;
@@ -12,6 +14,7 @@ body{
 	margin: 0 auto;
 	padding: 0;
 	height: 100vh;
+	background-color: white;
 }
 .prof_title {
 	margin: 0;
@@ -69,6 +72,62 @@ body{
 .tabcontent {
     float: left;
     padding: 0px 12px;
-    width: 80%;
-    height: 300px;
+    width: 75%;
+	height: 100vh;
+}
+
+table.reset_password{
+	margin: 25px 0 0 25px;
+	width: 100%;
+}
+
+.reset_password td{
+	height: 50px;
+	align-content: center;
+}
+
+#tab_save{
+	text-align: center;
+}
+
+.tab_promnpt{
+	width: 40%;
+	padding: 22px 30px;
+	text-align: left;
+}
+
+.tab_input{
+	width: 60%;
+	padding-left: 50px;
+}
+
+#btn_passub{
+	width: 30%;
+}
+
+#btn_delacc, #btn_logout{
+	margin: 0 auto;
+	width: 30%;
+}
+
+#tab_save{
+	height: 100px;
+}
+
+#btn_delacc{
+	background-color: #E02327;
+}
+
+table.other{
+	width: 100%;
+	margin: 30px 0 0;
+}
+
+.tab_other{
+	text-align: center;
+}
+
+.other td{
+	height: 100px;
+	align-content: center;
 }

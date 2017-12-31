@@ -3,7 +3,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="/static/css/profile.css">
-	<link rel="stylesheet" href="/static/css/index_layout.css">
+	<link rel="stylesheet" href="/static/css/elements.css">
 	<title>{{user.getusername()}}</title>
 </head>
 
@@ -16,9 +16,9 @@
 		<p id="prof_username">{{user.getusername()}}</p>
 		</div>
 		<div class="tab">
-			<button class="tablinks" onClick="openProfile(event, 'prof_main')" id="defaultOpen">Profile</button>
-			<button class="tablinks" onClick="openProfile(event, 'prof_password')">Password</button>
-			<button class="tablinks" onClick="openProfile(event, 'prof_other')">Other</button>
+			<button class="tablinks" onClick="openProfile(event, 'prof_main')" id="defaultOpen" value="profile">Profile</button>
+			<button class="tablinks" onClick="openProfile(event, 'prof_password')" value="password">Password</button>
+			<button class="tablinks" onClick="openProfile(event, 'prof_other')" value="other">Other</button>
 		</div>
 
 		<div id="prof_main" class="tabcontent">
@@ -26,18 +26,67 @@
 		</div>
 
 		<div id="prof_password" class="tabcontent">
-			<input name="old_pas" type="password" id="old_pas">
-			<input name="new_pas" type="password" id="new_pas">
-			
+			<form action="{{url_for('profile')}}?page=changepassword" method="post">
+				<table class="reset_password">
+					{% if error %}
+					<tr>
+						<th colspan="2">
+							<ul>
+								{% for msg in error %}
+								<li class="errormsg">{{msg}}</li>
+								{% endfor %}
+							</ul>
+						</th>
+					</tr>
+					{% else %}
+					<tr>
+						<th  colspan="2" class="msg_success" id="msg_pass_save"></th>
+					</tr>
+					{% endif %}
+					<tr>
+						<td class="tab_prompt">Old Password</td>
+						<td class="tab_input"><input name="old_pas" type="password" id="old_pas"></td>
+					</tr>
+					<tr>
+						<td class="tab_prompt">New Password</td>
+						<td class="tab_input"><input name="new_pas" type="password" id="new_pas"></td>
+					</tr>
+					<tr>
+						<td class="tab_prompt">Re-Enter Password</td>
+						<td class="tab_input"><input name="re_pas" type="password" id="re_pas"></td>
+					</tr>
+					<tr>
+						<td colspan="2" id="tab_save"><input type="submit" onclick="updateSuccessPrompt()" name="pass_submit" value="Save" id="btn_passub"></td>
+					</tr>
+				</table>
+			</form>
 		</div>
 
 		<div id="prof_other" class="tabcontent">
-			<h1>Other tab</h1>
+			<form action="{{url_for('profile')}}?page=other" method="post">
+				<table class="other">
+					<tr>
+						<td class="tab_other"><input class="btn_other" id="btn_delacc" value="Delete Account" type="submit" name="del_acc"></td>
+					</tr>
+					<tr>
+						<td class="tab_other"><input class="btn_other" id="btn_logout" value="Logout" type="submit" name="logout"></td>
+					</tr>
+				</table>
+			</form>
 		</div>
 
 		
 		
     </div>
     
-    <script src="/static/js/profile.js"></script>
+	<script src="/static/js/profile.js"></script>
+	<script>
+		{% if section %}
+		window.onload = windowOnLoad('{{section}}');
+		{% endif %}
+		// Get the element with id="defaultOpen" and click on it
+		document.getElementById("defaultOpen").click();
+	</script>
+	
+   
 </body>

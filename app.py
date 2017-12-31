@@ -1,9 +1,11 @@
 import os
 from flask import Flask, Blueprint, render_template,redirect, abort, request, session, flash
 from jinja2 import TemplateNotFound
-from conf_basic import app_config
+from conf_basic import app_config, database_config
 
 from Object.User import User
+from Object.Blog import Blog
+from Object.DataBase import DataBase
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -12,8 +14,9 @@ app.config.update(dict(
     LOGIN = app_config['Login']
 ))
 
+db = DataBase(database_config)
+user = User(db)
 
-user = User(app.config['DATABASEROOT']+app.config['LOGIN'])
 #app.register_blueprint(app) 
 
 
@@ -23,6 +26,8 @@ user = User(app.config['DATABASEROOT']+app.config['LOGIN'])
 LOGIN_USER_PASS_ERROR = "Username or Password are not mathch to our record"
 SIGN_UP_PASSWORD_NOT_MATCH = "The password you enter does not match"
 SIGN_UP_USERNAME_TAKEN = "The username you enter has been used"
+PROFILE_PASSWORD_NOT_MATCH = "The password you enter does not match"
+PROFILE_PASSWORD_OLD_NOT_MATHC = "The old password not correct"
 
 
 @app.route("/")
@@ -34,14 +39,51 @@ def index():
     #show_index()
     return render_template("home.html",user = user)
 
-@app.route("/myprofile")
+@app.route("/myprofile", methods=['GET','POST'])
 def profile():
     if not user.islogin():
         abort(401)
-    return render_template("profile.html", user = user)
+    page = request.args.get("page",None)
+    if page == "changepassword":
+        return changepassword(request)
+    elif page == "other":
+        return othertab(request)
+
+    return render_template("profile.html", user = user, error= None ,section = None)
+
+def changepassword(request):
+    """
+    Function will check the old password with the database and 
+    check if the new password match, then it will updata the data 
+    in the database
+    """
+    section = 'password'
+    error = []
+    if request.form['new_pas'] != request.form['re_pas']:
+        error.append(PROFILE_PASSWORD_NOT_MATCH)
+        return render_template("profile.html",user = user, error = error, section = section)
+    else:
+        result = user.update_password(request.form['old_pas'],request.form['new_pas'])
+        if not result:
+            error.append(PROFILE_PASSWORD_OLD_NOT_MATHC)
+            return render_template("profile.html",user = user, error = error, section = section)        
+    return render_template("profile.html",user = user, error = None ,section = section)
+
+def othertab(request):
+    """
+    Function will deal with the request from other tab
+    """
+    section = 'other'
+    if "logout" in request.form:
+        return logout()
+    elif "del_acc" in request.form:
+        return delete()
+    return render_template("profile.html", user = user, error = None, section = section)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    if user.islogin():
+        redirect("/home")
     page = request.args.get("page",None)
     if page is None:
         return login_(request)
@@ -67,11 +109,17 @@ def signup():
     if request.method == 'POST':
         if request.form['password'] != request.form['repassword']:
             error.append(SIGN_UP_PASSWORD_NOT_MATCH)
+            return render_template("signup.html",error = error) 
         else:    
             if user.signup(request.form['username'],request.form['password']):
-                return render_template("login_success.html",username = user.getusername())
+                if user.islogin():
+                    return redirect("/home")
+                else:
+                    return render_template("login_success.html",username = user.getusername())
             else:
                 error.append(SIGN_UP_USERNAME_TAKEN)
+                return render_template("signup.html",error = error) 
+    error = None
     return render_template("signup.html",error = error) 
 
 @app.route("/gallery")
@@ -109,6 +157,13 @@ def logout():
     Function will logout current user
     """
     user.logout()
+    return redirect("/home")
+
+def delete():
+    """
+    Function will delete current user
+    """
+    user.delete_account()
     return redirect("/home")
 
 

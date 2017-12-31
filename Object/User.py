@@ -1,4 +1,3 @@
-#from DataBase import connect_db
 from sqlite3 import dbapi2 as sqlite3
 LOGIN_TABLE = "Login"
 
@@ -14,6 +13,7 @@ class User:
         self._username = None
         self._login = False
         self._role = None
+        self._id = None
         self._database = database
 
     
@@ -29,13 +29,15 @@ class User:
         return:
             True if successed login, false otherwise
         """
+        # ('UserId','Username','Password','Role')
         data = self._check_password(username,password)
         if data is False:
             return False
         else:
             self._login = True
-            self._username = data[0]
-            self._role = data[2]
+            self._id = data[0]
+            self._username = data[1]
+            self._role = data[3]
         return self._login
 
     def logout(self):
@@ -67,18 +69,17 @@ class User:
         Function will update the user role 
         """
         self._updaterole(role)
+        self._role = role
         return
 
     def _updaterole(self,role):
         """
         Private helper function for set role, function will update the database data
+        Precondition:
+            role (string) : role for the database
         """
         UPDATE_STRING = "UPDATE {} SET Role = '{}' WHERE Username = '{}'".format(LOGIN_TABLE,role,self._username)
-        coon = self._connect_db()
-        c = coon.cursor()
-        c.execute(UPDATE_STRING)
-        coon.commit()
-        coon.close()
+        self._database.setdata(UPDATE_STRING)
         return
 
     def getrole(self):
@@ -88,19 +89,6 @@ class User:
             string : current user role
         """
         return self._role
-
-    def _connect_db(self):
-        """
-        Function will create a connection for the given name of database
-        Precondition:
-            db_loca: the location of the database file
-        """
-        try:
-            rv = sqlite3.connect(self._database)
-            rv.row_factory = sqlite3.Row
-            return rv
-        except Exception:
-            raise Exception("Can't not find the database file")
 
     def signup(self,username,password):
         """
@@ -112,27 +100,26 @@ class User:
         return :
             True success create, False fail to create
         """
-        GET_STRING = "SELECT * FROM {} WHERE Username='{}'".format(LOGIN_TABLE,username)
-        PUT_STRING = "INSERT INTO {} VALUES ('{}', '{}', 'USER')".format(LOGIN_TABLE,username,password)
-        coon = self._connect_db()
-        c = coon.cursor()
-        c.execute(GET_STRING)
-        data = c.fetchall()
-
-        # Username taken
-        if len(data)!=0:
-            coon.close()
+        PUT_STRING = "INSERT INTO {} VALUES ('{}', '{}', 1)".format(LOGIN_TABLE,username,password)
+        if self._has_user(username):
             return False
-
-        c.execute(PUT_STRING)
-        coon.commit()
-        coon.close()
+        
+        self._database.setdata(PUT_STRING)
 
         self._username = username
         self._login = True
-        self._role = "USER"
+        self._role = 1
 
         return True
+
+    def delete_account(self):
+        """
+        Function will delete the current account 
+        """
+        DELETE_STRING = "DELETE FROM {} WHERE Username = '{}'".format(LOGIN_TABLE,self._username)
+        self._database.setdata(DELETE_STRING)
+        self.logout()
+        return 
 
     def update_password(self,old,new):
         """
@@ -154,27 +141,34 @@ class User:
         """
         Function will update the password in the databse for the current user
         """
-        UPDATE_STRING = "UPDATE {} SET Password = '{}' WHERE Username = '{}'".format(LOGIN_TABLE,role,self._username)
-        conn = self_connect_db()
-        c.execute(UPDATE_STRING)
-        conn.commit()
-        conn.close()
+        UPDATE_STRING = "UPDATE {} SET Password = '{}' WHERE Username = '{}'".format(LOGIN_TABLE,password,self._username)
+        self._database(UPDATE_STRING)
         return
 
     def _check_password(self,username,password):
         """
         Function will check if the password match the data,
         if match function will return the data for the user
-        Precindition:
+        Precondition:
             username (string) : username for the user
             password (string) : password for the user
         """
-        db_string = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
-        conn = self._connect_db()
-        c = conn.cursor()
-        c.execute(db_string)
-        data = c.fetchall()
-        conn.close()
+        GET_STRING = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
+        data = self._database.getdata(GET_STRING)
         if len(data) == 0:
             return False 
         return data[0]
+
+    def _has_user(self,username):
+        """
+        Function will check if the the given username is in the database
+        if user in the database, then return true, otherwiase false
+        Precondition:
+            username (string) : username for check in the database
+        """
+        GET_STRING = "SELECT * FROM {} WHERE Username='{}'".format(LOGIN_TABLE,username)
+        data = self._database.getdata(GET_STRING)
+        if len(data)!=0:
+            return True
+        else:
+            return False
