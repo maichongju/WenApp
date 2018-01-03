@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block title %}
+    <title>Blog</title>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <table>
+			{% for blog in blogs %}
+			<tr>
+				<td><a href="{{url_for('blog')}}?ID={{blog.getId()}}">{{blog.getTitle()}}</a></td>
+			</tr>
+			{% endfor %}
+		</table>
+    </div>
+{% endblock %}

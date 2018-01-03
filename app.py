@@ -4,7 +4,7 @@ from jinja2 import TemplateNotFound
 from conf_basic import app_config, database_config
 
 from Object.User import User
-from Object.Blog import Blog
+from Object.Blog import Blogs
 from Object.DataBase import DataBase
 
 app = Flask(__name__)
@@ -16,16 +16,17 @@ app.config.update(dict(
 
 db = DataBase(database_config)
 user = User(db)
+blogs = Blogs(db)
 
 #app.register_blueprint(app) 
 
 
 #app = Blueprint('app', __name__)
 
-# Error message for invaild login
-LOGIN_USER_PASS_ERROR = "Username or Password are not mathch to our record"
+# Error message for invalid login
+LOGIN_USER_PASS_ERROR = "User name or Password are not match to our record"
 SIGN_UP_PASSWORD_NOT_MATCH = "The password you enter does not match"
-SIGN_UP_USERNAME_TAKEN = "The username you enter has been used"
+SIGN_UP_USERNAME_TAKEN = "The user name you enter has been used"
 PROFILE_PASSWORD_NOT_MATCH = "The password you enter does not match"
 PROFILE_PASSWORD_OLD_NOT_MATHC = "The old password not correct"
 
@@ -54,7 +55,7 @@ def profile():
 def changepassword(request):
     """
     Function will check the old password with the database and 
-    check if the new password match, then it will updata the data 
+    check if the new password match, then it will update the data 
     in the database
     """
     section = 'password'
@@ -122,9 +123,27 @@ def signup():
     error = None
     return render_template("signup.html",error = error) 
 
-@app.route("/gallery")
-def gallery():
-    return render_template("gallery.html",user = user)
+@app.route("/blog")
+def blog():
+    ID = request.args.get("ID",None)
+    if ID is None:
+        return render_template("blog.html",user = user,blogs = blogs.getblogs())
+    else:
+        return getoneblog(ID)
+
+def getoneblog(Id):
+    """
+    Helper funtion for blog, get a single blog
+    """
+    blog = blogs.getblog(Id)
+    if blog is None:
+        abort(404)
+    else:
+        return render_template("blog_template.html",user = user, blog = blog)
+
+@app.route("/editblog")
+def editblog():
+    return render_template("edit_blog.html",user = user)
 
 @app.route("/about")
 def about():

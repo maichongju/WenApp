@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block title %}
+    <title>{{blog.getTitle()}}</title>
+{% endblock %}
+
+{% block content%}
+    <h1>{{blog.getTitle()}}</h1>
+    <h3>Author:{{blog.getAuthor()}}</h3>
+    <h3>Create Time: {{blog.getCreateTime()}}</h3>
+    <p>{{blog.getContent()}}</p><br>
+{% endblock %}

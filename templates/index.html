@@ -18,6 +18,7 @@
             <div id="User">
                 {% if user.islogin() == true %}
                     <p id="text_loginout">Welcome back <a id="profile" href="/myprofile"><b>{{user.getusername()}}</b></a> &nbsp;&nbsp;
+					<a class="btn_cblog" href="/editblog">New Post</a>&nbsp;&nbsp;
                     <a class="btn_loginout" href="/login?page=logout">Logout</a></p>
                 {% else %}
                     <p id="text_loginout">Hi, Guest&nbsp;&nbsp;  
@@ -27,7 +28,7 @@
 
 			<nav id="topnav">
 				<a class="btn_nav" href="/home">Home</a>
-				<a class="btn_nav" href="/gallery">Gallery</a>
+				<a class="btn_nav" href="/blog">Blog</a>
 				<a class="btn_nav" href="/about">About</a>
 			</nav>
        		{% block content %}
