@@ -2,3 +2,4 @@ Flask==0.12.2
 Jinja2==2.9.6
 Werkzeug==0.12.2
 pyodbc==4.0.21
+gunicorn
