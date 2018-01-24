@@ -14,11 +14,11 @@ app.config.update(dict(
     LOGIN = app_config['Login']
 ))
 
-db = DataBase(database_config)
+db = DataBase(app.root_path + "\config.ini")
 user = User(db)
 blogs = Blogs(db)
 
-#app.register_blueprint(app) 
+#app.register_blueprint(app)
 
 
 #app = Blueprint('app', __name__)
@@ -54,8 +54,8 @@ def profile():
 
 def changepassword(request):
     """
-    Function will check the old password with the database and 
-    check if the new password match, then it will update the data 
+    Function will check the old password with the database and
+    check if the new password match, then it will update the data
     in the database
     """
     section = 'password'
@@ -67,7 +67,7 @@ def changepassword(request):
         result = user.update_password(request.form['old_pas'],request.form['new_pas'])
         if not result:
             error.append(PROFILE_PASSWORD_OLD_NOT_MATHC)
-            return render_template("profile.html",user = user, error = error, section = section)        
+            return render_template("profile.html",user = user, error = error, section = section)
     return render_template("profile.html",user = user, error = None ,section = section)
 
 def othertab(request):
@@ -99,7 +99,7 @@ def login():
     elif page == 'logout':
         return logout()
     else:
-        return redirect("/login") 
+        return redirect("/login")
 
     #should never get to here
     abort(404)
@@ -110,8 +110,8 @@ def signup():
     if request.method == 'POST':
         if request.form['password'] != request.form['repassword']:
             error.append(SIGN_UP_PASSWORD_NOT_MATCH)
-            return render_template("signup.html",error = error) 
-        else:    
+            return render_template("signup.html",error = error)
+        else:
             if user.signup(request.form['username'],request.form['password']):
                 if user.islogin():
                     return redirect("/home")
@@ -119,9 +119,9 @@ def signup():
                     return render_template("login_success.html",username = user.getusername())
             else:
                 error.append(SIGN_UP_USERNAME_TAKEN)
-                return render_template("signup.html",error = error) 
+                return render_template("signup.html",error = error)
     error = None
-    return render_template("signup.html",error = error) 
+    return render_template("signup.html",error = error)
 
 @app.route("/blog")
 def blog():
@@ -167,7 +167,7 @@ def login_(request):
     if request.method == 'POST':
         if user.login(request.form['username'],request.form['password']):
             return redirect ("/login?page=success")
-        else:    
+        else:
             error = LOGIN_USER_PASS_ERROR
     return render_template("login.html",error=error)
 
@@ -188,5 +188,3 @@ def delete():
 
 if __name__ == "__main__":
     app.run(host=app_config['host_name'],port = app_config['port'],debug = app_config['debug'])
-
-
