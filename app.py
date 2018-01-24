@@ -25,6 +25,7 @@ blogs = Blogs(db)
 
 # Error message for invalid login
 LOGIN_USER_PASS_ERROR = "User name or Password are not match to our record"
+SERVER_UNVALIABLE = "Server Out Of Server"
 SIGN_UP_PASSWORD_NOT_MATCH = "The password you enter does not match"
 SIGN_UP_USERNAME_TAKEN = "The user name you enter has been used"
 PROFILE_PASSWORD_NOT_MATCH = "The password you enter does not match"
@@ -163,12 +164,10 @@ def login_(request):
     postcondition:
         request : request object from the login page
     """
-    error = None
     if request.method == 'POST':
-        if user.login(request.form['username'],request.form['password']):
+        result,error = user.login(request.form['username'],request.form['password'])
+        if result:
             return redirect ("/login?page=success")
-        else:
-            error = LOGIN_USER_PASS_ERROR
     return render_template("login.html",error=error)
 
 def logout():

@@ -1,6 +1,9 @@
 from sqlite3 import dbapi2 as sqlite3
 LOGIN_TABLE = "Login"
 
+SERVER_UNVALIABLE = "Server Out of Server"
+PASSWORD_NOT_MATCH = "User name or Password are not match to our record"
+
 class User:
 
     def __init__(self,database):
@@ -8,7 +11,7 @@ class User:
         username (string) : Current user username
         login (boolean) : True if has login, otherwise false
         role (string) : if the user loggin then shwo the role for the current user
-        database (string) : database location 
+        database (string) : database location
         """
         self._username = None
         self._login = False
@@ -16,12 +19,12 @@ class User:
         self._id = None
         self._database = database
 
-    
+
 
     def login(self,username,password):
         """
-        Function will compare the given username and password to the database, 
-        if the database has a match for the password and the password then function 
+        Function will compare the given username and password to the database,
+        if the database has a match for the password and the password then function
         will return True, otherwise return false
         Precondition:
             username (string) : username need to be check
@@ -30,9 +33,9 @@ class User:
             True if successed login, false otherwise
         """
         # ('UserId','Username','Password','Role')
-        data = self._check_password(username,password)
+        data,error = self._check_password(username,password)
         if data is False:
-            return False
+            return self._login,error
         else:
             self._login = True
             self._id = data[0]
@@ -51,7 +54,7 @@ class User:
 
     def getusername(self):
         """
-        Function will return the current username 
+        Function will return the current username
         """
         if self._username is None:
             return "Guest"
@@ -66,7 +69,7 @@ class User:
 
     def setrole(self,role):
         """
-        Function will update the user role 
+        Function will update the user role
         """
         self._updaterole(role)
         self._role = role
@@ -103,7 +106,7 @@ class User:
         PUT_STRING = "INSERT INTO {} VALUES ('{}', '{}', 1)".format(LOGIN_TABLE,username,password)
         if self._has_user(username):
             return False
-        
+
         self._database.setdata(PUT_STRING)
 
         self._username = username
@@ -114,12 +117,12 @@ class User:
 
     def delete_account(self):
         """
-        Function will delete the current account 
+        Function will delete the current account
         """
         DELETE_STRING = "DELETE FROM {} WHERE Username = '{}'".format(LOGIN_TABLE,self._username)
         self._database.setdata(DELETE_STRING)
         self.logout()
-        return 
+        return
 
     def update_password(self,old,new):
         """
@@ -136,7 +139,7 @@ class User:
             self._update_password(new)
 
         return True
- 
+
     def _update_password(self,password):
         """
         Function will update the password in the databse for the current user
@@ -155,8 +158,10 @@ class User:
         """
         GET_STRING = "SELECT * FROM {} WHERE Username='{}' and Password='{}'".format(LOGIN_TABLE,username,password)
         data = self._database.getdata(GET_STRING)
+        if data is None:
+            return False,SERVER_UNVALIABLE
         if len(data) == 0:
-            return False 
+            return False, PASSWORD_NOT_MATCH
         return data[0]
 
     def _has_user(self,username):
