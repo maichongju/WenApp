@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+  {% if blogs is not none %}
     <div>
         <table>
 			{% for blog in blogs %}
@@ -14,4 +15,7 @@
 			{% endfor %}
 		</table>
     </div>
+  {% else %}
+      <h1 class="msg_error"> Server Unviliable </h1>
+  {% endif %}
 {% endblock %}

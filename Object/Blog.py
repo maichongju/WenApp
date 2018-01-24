@@ -21,7 +21,7 @@ class Blog:
 
     def getId(self):
         """
-        Function will return the blog id 
+        Function will return the blog id
         Return :
             (String) : Blog Id
         """
@@ -39,7 +39,7 @@ class Blog:
         """
         Function will return the blog author id
         return:
-            (int) : Author Id 
+            (int) : Author Id
         """
         return self._AuthorId
 
@@ -47,7 +47,7 @@ class Blog:
         """
         Function will set/update the Author Id for the blog object
         Precondition:
-            AuthorId (int): AuthorId 
+            AuthorId (int): AuthorId
         """
         self._AuthorId = int(AuthorId)
 
@@ -71,7 +71,7 @@ class Blog:
         """
         Function will return the current blog title
         return :
-            (String) : title 
+            (String) : title
         """
         return self._Title
 
@@ -85,7 +85,7 @@ class Blog:
 
     def getCreateTime(self):
         """
-        Function will return the blog create time 
+        Function will return the blog create time
         return :
             (string) : Blog create time
         """
@@ -95,13 +95,13 @@ class Blog:
         """
         Function will set the Create Time for the blog
         Procondition:
-           Time (String) : YYYY-MM-DD HH:MM:SS 
+           Time (String) : YYYY-MM-DD HH:MM:SS
         """
         self._Create_Time = Time
 
     def getPictureId(self):
         """
-        Function will return the pictureId, If the blog do 
+        Function will return the pictureId, If the blog do
         not have the title picture then it will return None
         return :
             (int) if the blog has title picture then it will title picture
@@ -151,11 +151,11 @@ class Blogs:
         """
         self._database = database
         self._size = 20
-        self._blogs = self._updateblogs()
+        self._blogs = None
 
     def _updateblogs(self):
         """
-        Helper function for getting all the blog 
+        Helper function for getting all the blog
         """
         GET_STRING = "SELECT * FROM {}".format(BLOG_TABLE)
         datas = self._database.getdata(GET_STRING)
@@ -180,7 +180,7 @@ class Blogs:
 
     def getblogs(self):
         """
-        Function will return the blogs list 
+        Function will return the blogs list
         return :
             list : list of blog object, Empty will return None
         """

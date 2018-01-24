@@ -1,40 +1,18 @@
 import pyodbc as sql
+from configparser import ConfigParser
+from mysql.connector import connect
+from mysql.connector.errors import ProgrammingError
 
 class DataBase:
     """
-    This class is using pyodbc as connection to Azure 
+    This class is using pyodbc as connection to Azure
     """
-    def __init__(self,config):
-        self._connstr = self._get_connection(config)
-
-        return 
-
-    def _get_connection(self,config):
-        """
-        Function will get the database connection string 
-        form the config, and return as a full connection 
-        string
-        Precondition:
-            config (Database) : all the connection info for the string
-        return :
-            (String) full connetion string for SQL Server
-        """
-        driver = config['driver']
-        server = config['server']
-        database = config['database']
-        username = config['username']
-        password = config['password']
-        cs = "DRIVER={};SERVER={};DATABASE={};UID={};PWD={}".format( \
-                driver,server,database,username,password)
-        return cs
-
-    def _create_conn(self):
-        """
-        Function will return database connection
-        return :
-            databse connection
-        """ 
-        return sql.connect(self._connstr)
+    def __init__(self,option_file,type = None):
+        self._type_list = ["MySQL","SQLServer"]
+        self._file = option_file
+        self._connection = Connect(option_file)
+        self._type = type
+        return
 
     def getdata(self,command):
         """
@@ -45,11 +23,11 @@ class DataBase:
         return :
             data retrive from databse
         """
-        conn = self._create_conn()
-        c = conn.cursor()
-        c.execute(command)
-        data = c.fetchall()
-        conn.close()
+        data = None
+        if self._connection.connect:
+            self._connection.get_cursor().execute(command)
+            data = self._connection.get_cursor().fetchall()
+            self._connection.close()
         return data
 
     def setdata(self,command):
@@ -58,10 +36,112 @@ class DataBase:
         Precondition:
             command (String) : string need to excutive
         """
-        conn = self._create_conn()
-        c = conn.cursor()
-        c.execute(command)
-        conn.commit()
-        conn.close()
+        if self._connection.connect:
+            self._connection.get_cursor().execute(command)
+            self._connection.commit()
+            self._connection.close()
+            return True
+        return False
+
+
+class Connect:
+    def __init__(self,option_file,type = None):
+        """
+        Initialize a MySQL database connection object.
+        Preconditions:
+            option_file - name of option file (str)
+        Postconditions:
+            Initializes a database connection object.
+        """
+        self._connection = None
+        self._type = type
+        self._config = ConfigParser()
+        try:
+            self._config.read_file(open(option_file))
+        except FileNotFoundError:
+            raise Exception(
+                "Option file '{}' not found.".format(option_file))
+
         return
 
+    def connect(self):
+        """
+        make the connection connect, if connect return true otherwise return False
+        """
+        result= self._connect_mysql(option_file)
+        if not result == True:
+            result = self._connect_sqlserver(option_file)
+        return result
+
+    def _connect_mysql(self):
+        """
+        Function will try to initialize a MySQL database connection object.
+        Precondition:
+            config (str): name of config file
+        return:
+            False if initialize fail, otherwise return the connect object
+        """
+        try:
+            # Extract the client section
+            info = self._config['MySQL']
+            # Connect to the database
+            self._connection = connect(
+                user=info['user'], password=info['password'], host=info['host'],
+                database=info['database'])
+        except Exception as p:
+            self._connection = None
+            print(p.message)
+            return False
+        return True
+
+
+    def _connect_sqlserver(self):
+        """
+        Function will get the database connection string
+        form the config, and return as a full connection
+        string
+        Precondition:
+            config (Database) : all the connection info for the string
+        return :
+            (String) full connetion string for SQL Server
+        """
+        try:
+            info = self._config['SQLServer']
+            driver = info['driver']
+            server = info['server']
+            database = info['database']
+            username = info['username']
+            password = info['password']
+            self._connection = "DRIVER={};SERVER={};DATABASE={};UID={};PWD={}".format( \
+                    driver,server,database,username,password)
+        except Exception as p:
+            self._connection = None
+            return False
+        return True
+
+    def get_cursor(self):
+        """
+        Returns a database cursor.
+        """
+        try:
+            return self._connection.cursor()
+        except AttributeError:
+            raise Exception("Database connection is closed.")
+
+    def close(self):
+        """
+        Closes the database connection.
+        """
+        try:
+            self._connection.close()
+            self._connection = None
+            return
+        except AttributeError:
+            raise Exception("Database connection is already closed.")
+
+
+    def commit(self):
+        try:
+            self._connection.commit()
+        except AttributeError:
+            raise Exception("Database connection is already closed.")
