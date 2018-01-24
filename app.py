@@ -168,6 +168,11 @@ def login_(request):
         result,error = user.login(request.form['username'],request.form['password'])
         if result:
             return redirect ("/login?page=success")
+<<<<<<< HEAD
+=======
+        else:
+            error = LOGIN_USER_PASS_ERROR
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
     return render_template("login.html",error=error)
 
 def logout():

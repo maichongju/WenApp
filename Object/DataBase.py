@@ -24,7 +24,11 @@ class DataBase:
             data retrive from databse
         """
         data = None
+<<<<<<< HEAD
         if self._connection.connect():
+=======
+        if self._connection.connect:
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
             self._connection.get_cursor().execute(command)
             data = self._connection.get_cursor().fetchall()
             self._connection.close()
@@ -36,7 +40,11 @@ class DataBase:
         Precondition:
             command (String) : string need to excutive
         """
+<<<<<<< HEAD
         if self._connection.connect():
+=======
+        if self._connection.connect:
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
             self._connection.get_cursor().execute(command)
             self._connection.commit()
             self._connection.close()
@@ -61,15 +69,25 @@ class Connect:
         except FileNotFoundError:
             raise Exception(
                 "Option file '{}' not found.".format(option_file))
+<<<<<<< HEAD
+=======
+
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
         return
 
     def connect(self):
         """
         make the connection connect, if connect return true otherwise return False
         """
+<<<<<<< HEAD
         result= self._connect_mysql()
         if result == False:
             result = self._connect_sqlserver()
+=======
+        result= self._connect_mysql(option_file)
+        if not result == True:
+            result = self._connect_sqlserver(option_file)
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
         return result
 
     def _connect_mysql(self):
@@ -87,9 +105,15 @@ class Connect:
             self._connection = connect(
                 user=info['user'], password=info['password'], host=info['host'],
                 database=info['database'])
+<<<<<<< HEAD
         except Exception:
             self._connection = None
             print("MySQL Ddatabase cannot connect")
+=======
+        except Exception as p:
+            self._connection = None
+            print(p.message)
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
             return False
         return True
 
@@ -111,11 +135,17 @@ class Connect:
             database = info['database']
             username = info['username']
             password = info['password']
+<<<<<<< HEAD
             connectstring = "DRIVER={};SERVER={};DATABASE={};UID={};PWD={}".format( \
                     driver,server,database,username,password)
             self._connection = sql.connect(connectstring)
         except Exception as p:
             print("SQLServer cannot connect")
+=======
+            self._connection = "DRIVER={};SERVER={};DATABASE={};UID={};PWD={}".format( \
+                    driver,server,database,username,password)
+        except Exception as p:
+>>>>>>> b512cc0df62c682b023807b36ce98954e451d95d
             self._connection = None
             return False
         return True
