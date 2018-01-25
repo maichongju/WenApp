@@ -164,6 +164,7 @@ def login_(request):
     postcondition:
         request : request object from the login page
     """
+    error = None
     if request.method == 'POST':
         result,error = user.login(request.form['username'],request.form['password'])
         if result:

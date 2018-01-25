@@ -68,8 +68,8 @@ class Connect:
         make the connection connect, if connect return true otherwise return False
         """
         result= self._connect_mysql()
-        if result == False:
-            result = self._connect_sqlserver()
+        #if result == False:
+        #    result = self._connect_sqlserver()
         return result
 
     def _connect_mysql(self):

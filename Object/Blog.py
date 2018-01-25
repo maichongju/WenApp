@@ -1,4 +1,4 @@
-BLOG_TABLE = "Blogs"
+BLOG_TABLE = "blog"
 
 class Blog:
     """
